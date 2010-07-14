@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name                            = "cap_unicorn"
-  s.version                         = "0.0.1"
+  s.version                         = "0.0.2"
   s.author                          = "Scott Taylor"
   s.email                           = "scott@railsnewbie.com"
   s.homepage                        = "http://github.com/smtlaissezfaire/cap_unicorn"
