@@ -13,12 +13,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "unicorn_rails -D -E #{rails_env} -c #{current_path}/config/unicorn/#{rails_env}.rb"
     end
 
+    desc "Restart unicorn"
     task :restart do
       if pid = master_pid
         run "kill -s USR2 #{pid}"
       end
     end
 
+    desc "Stop unicorn"
     task :stop do
       if pid = master_pid
         run "kill -s TERM #{pid}"
