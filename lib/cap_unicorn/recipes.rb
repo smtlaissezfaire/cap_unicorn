@@ -1,7 +1,7 @@
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :unicorn do
     def self.master_pid
-      pid = capture "pid=$(ps aux | grep unicorn_rails | grep master | grep -v grep); echo $pid"
+      pid = capture "pid=$(ps aux | grep unicorn_rails | grep master | grep -v grep | grep #{current_path}); echo $pid"
 
       unless pid.empty?
         pid.split(" ")[1]
