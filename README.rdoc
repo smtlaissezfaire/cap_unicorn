@@ -1,0 +1,17 @@
+= cap_unicorn
+
+capistrano unicorn tasks
+
+== Usage
+
+  $ gem install cap_unicorn
+
+
+  # in deploy.rb:
+
+  require 'cap_unicorn/recipes'
+
+
+  $ cap unicorn:start
+  $ cap unicorn:stop
+  $ cap unicorn:restart
