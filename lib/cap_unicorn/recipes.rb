@@ -1,7 +1,11 @@
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :unicorn do
+    def self.command_name
+      command_name = rails_version =~ /^3.*/ ? "unicorn" : "unicorn_rails"
+    end
+
     def self.master_pid
-      pid = capture "pid=$(ps aux | grep unicorn_rails | grep master | grep -v grep | grep #{current_path}); echo $pid"
+      pid = capture "pid=$(ps aux | grep #{command_name} | grep master | grep -v grep | grep #{current_path}); echo $pid"
 
       unless pid.empty?
         pid.split(" ")[1]
@@ -10,8 +14,6 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Start unicorn"
     task :start do
-      command_name = rails_version =~ /^3.*/ ? "unicorn" : "unicorn_rails"
-
       run "#{command_name} -D -E #{rails_env} -c #{current_path}/config/unicorn/#{rails_env}.rb"
     end
 
