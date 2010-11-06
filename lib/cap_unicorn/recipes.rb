@@ -10,7 +10,9 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Start unicorn"
     task :start do
-      run "unicorn_rails -D -E #{rails_env} -c #{current_path}/config/unicorn/#{rails_env}.rb"
+      command_name = rails_version =~ /^3.*/ ? "unicorn" : "unicorn_rails"
+
+      run "#{command_name} -D -E #{rails_env} -c #{current_path}/config/unicorn/#{rails_env}.rb"
     end
 
     desc "Restart unicorn"

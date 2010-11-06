@@ -11,6 +11,8 @@ capistrano unicorn tasks
 
   require 'cap_unicorn/recipes'
 
+  set :rails_version, "3.x"
+  # OR: set :rails_version, "2.x"
 
   $ cap unicorn:start
   $ cap unicorn:stop
