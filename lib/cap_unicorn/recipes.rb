@@ -5,7 +5,15 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     def self.master_pid
-      pid = capture "pid=$(ps aux | grep #{command_name} | grep master | grep -v grep | grep #{current_path}); echo $pid"
+      pid = capture "pid=$(ps aux | grep #{command_name} | grep master | grep -v '(old)' | grep -v grep | grep #{current_path}); echo $pid"
+
+      unless pid.empty?
+        pid.split(" ")[1]
+      end
+    end
+
+    def self.old_master_pid
+      pid = capture "pid=$(ps aux | grep #{command_name} | grep master | grep '(old)' | grep -v grep | grep #{current_path}); echo $pid"
 
       unless pid.empty?
         pid.split(" ")[1]
@@ -21,6 +29,23 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :restart do
       if pid = master_pid
         run "kill -s USR2 #{pid}"
+
+        loop do
+          puts "Searching for newly spawned master process..."
+
+          if pid = master_pid
+            puts "Found new master process..."
+
+            if old_pid = old_master_pid
+              run "kill -s WINCH #{old_pid}"
+              run "kill -s QUIT  #{old_pid}"
+            end
+
+            break
+          end
+
+          sleep 1
+        end
       end
     end
 
